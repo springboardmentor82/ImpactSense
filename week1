@@ -1,0 +1,25 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv("/content/earthquake_1995-2023.csv")
+
+print("Dataset Loaded Successfully")
+df.head()
+print("Rows:", df.shape[0])
+print("Columns:", df.shape[1])
+print("Column Names:")
+print(df.columns)
+df.info()
+df.isnull().sum()
+print("Duplicate rows:", df.duplicated().sum())
+df = df.drop_duplicates()
+sns.histplot(df['magnitude'], bins=30, kde=True)
+plt.title("Magnitude Distribution")
+plt.show()
+sns.histplot(df['depth'], bins=30, kde=True)
+plt.title("Depth Distribution")
+plt.show()
+sns.scatterplot(x=df['longitude'], y=df['latitude'])
+plt.title("Earthquake Locations")
+plt.show()
