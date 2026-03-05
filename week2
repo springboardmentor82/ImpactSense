@@ -1,0 +1,54 @@
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+df = pd.read_csv("/content/earthquake_1995-2023.csv")
+
+print("Original Shape:", df.shape)
+
+
+df = df.drop_duplicates()
+
+print("Shape After Removing Duplicates:", df.shape)
+print("\nMissing Values BEFORE Cleaning:")
+print(df.isnull().sum())
+num_cols = df.select_dtypes(include=np.number).columns
+
+df[num_cols] = df[num_cols].fillna(df[num_cols].median())
+
+print("\nNumerical Missing Values Handled.")
+cat_cols = df.select_dtypes(include='object').columns
+
+df[cat_cols] = df[cat_cols].fillna("Unknown")
+
+print("Categorical Missing Values Handled.")
+print("\nMissing Values AFTER Cleaning:")
+print(df.isnull().sum())
+for col in cat_cols:
+    le = LabelEncoder()
+    df[col] = le.fit_transform(df[col])
+    print(f"Encoded column: {col}")
+def col(names):
+  for n in names:
+      if n in df.columns:
+          return n
+
+mag = col(['magnitude','mag'])
+lat = col(['latitude','lat'])
+lon = col(['longitude','lon'])
+depth = col(['depth','depth_km'])
+
+features = [mag, depth, lat, lon]
+
+print("\nSelected Features:", features)
+X = df[features]
+
+print("\nFirst 5 Rows of Selected Features:")
+print(X.head())
+scaler = StandardScaler()
+
+X_scaled = scaler.fit_transform(X)
+
+X_scaled = pd.DataFrame(X_scaled, columns=features)
+
+print("\nFinal Preprocessed Data Shape:", X_scaled.shape)
+print(X_scaled.head())
