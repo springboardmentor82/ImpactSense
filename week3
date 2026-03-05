@@ -1,0 +1,82 @@
+import pandas as pd
+import numpy as np
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, classification_report
+df = pd.read_csv("/content/earthquake_1995-2023.csv")
+
+print("Dataset Loaded:", df.shape)
+# Remove duplicates
+df = df.drop_duplicates()
+num_cols = df.select_dtypes(include=np.number).columns
+df[num_cols] = df[num_cols].fillna(df[num_cols].median())
+cat_cols = df.select_dtypes(include='object').columns
+df[cat_cols] = df[cat_cols].fillna("Unknown")
+
+
+if 'magnitude' in df.columns:
+    mag_col = 'magnitude'
+elif 'mag' in df.columns:
+    mag_col = 'mag'
+else:
+    raise Exception("Magnitude column not found")
+
+
+lat_col = 'latitude' if 'latitude' in df.columns else 'lat'
+lon_col = 'longitude' if 'longitude' in df.columns else 'lon'
+depth_col = 'depth' if 'depth' in df.columns else 'depth_km'
+
+print("Using Columns:", mag_col, depth_col, lat_col, lon_col)
+def risk_level(value):
+    if value < 4:
+        return 0   
+    elif value < 6:
+        return 1   
+    else:
+        return 2  
+
+df['risk'] = df[mag_col].apply(risk_level)
+
+print(df[['risk', mag_col]].head())
+features = [mag_col, depth_col, lat_col, lon_col]
+
+X = df[features]
+y = df['risk']
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled, y, test_size=0.2, random_state=42
+)
+
+print("Training Shape:", X_train.shape)
+print("Testing Shape:", X_test.shape)
+if y_train.nunique() < 2:
+    print("Error: Logistic Regression requires at least two classes for training.")
+    print("Only one class found in y_train:", y_train.unique()[0])
+else:
+   
+    lr = LogisticRegression()
+
+    lr.fit(X_train, y_train)
+
+   
+    y_pred_lr = lr.predict(X_test)
+
+    print("Logistic Regression Accuracy:", accuracy_score(y_test, y_pred_lr))
+
+    
+    print("\nClassification Report:\n")
+    print(classification_report(y_test, y_pred_lr))
+dt = DecisionTreeClassifier(random_state=42)
+dt.fit(X_train, y_train)
+
+y_pred_dt = dt.predict(X_test)
+
+print("Decision Tree Accuracy:",
+      accuracy_score(y_test, y_pred_dt))
+
+print("\nClassification Report:\n")
+print(classification_report(y_test, y_pred_dt))
