@@ -20,17 +20,19 @@ def get_db_connection():
         host = host_raw
 
     try:
-        # Connect with explicit port and SSL configuration
+        # Aiven requires SSL. 'REQUIRED' ensures we don't fall back to plaintext.
+        print(f"DEBUG: Attempting connection to {host} on port {port} as user {user}")
         conn = mysql.connector.connect(
             host=host,
             port=port,
             user=user,
             password=password,
             connection_timeout=20,
-            ssl_disabled=False # Enable SSL
+            ssl_mode='REQUIRED' # This is the standard way to enforce SSL in modern mysql-connector
         )
         
         if conn.is_connected():
+            print("DEBUG: Connection established!")
             cursor = conn.cursor()
             cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}")
             cursor.close()
@@ -39,7 +41,7 @@ def get_db_connection():
             
     except Error as e:
         print(f"CRITICAL SQL ERROR: {e}")
-        print(f"Attempted connection to {host}:{port}")
+        print(f"Full Error Details: {str(e)}")
         return None
     return None
 
