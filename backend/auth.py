@@ -6,7 +6,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
 # NOTE: Since database.py is in the same directory, we can import it locally
-from .database import get_db_connection
+from database import get_db_connection
 
 SECRET_KEY = os.getenv("SECRET_KEY", "supersecret-jwt-key-replace-in-prod")
 ALGORITHM = "HS256"

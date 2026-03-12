@@ -6,8 +6,8 @@ import joblib
 import pandas as pd
 import os
 
-from .database import init_db, get_db_connection
-from .auth import get_password_hash, verify_password, create_access_token, get_current_user, get_optional_current_user
+from database import init_db, get_db_connection
+from auth import get_password_hash, verify_password, create_access_token, get_current_user, get_optional_current_user
 
 app = FastAPI(title="ImpactSense API")
 
