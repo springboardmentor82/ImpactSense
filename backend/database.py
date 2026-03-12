@@ -9,11 +9,13 @@ def get_db_connection():
     db_name = os.getenv("DB_NAME", "impactsense")
     
     try:
-        # First, connect without specifying a database to ensure the host/user/pass are correct
+        # Connect with SSL enabled and a longer timeout for cloud environments
         conn = mysql.connector.connect(
             host=host,
             user=user,
-            password=password
+            password=password,
+            connection_timeout=20, # 20 second timeout
+            ssl_disabled=False     # Aiven requires SSL
         )
         
         if conn.is_connected():
@@ -26,7 +28,10 @@ def get_db_connection():
             return conn
             
     except Error as e:
-        print(f"Error connecting to MySQL: {e}")
+        print(f"CRITICAL SQL ERROR: {e}")
+        # Log specific helpful hints for Error 2003/110
+        if "2003" in str(e) or "110" in str(e):
+            print("HINT: This is a connection timeout. Check Aiven IP filters and DB_HOST format on Render.")
         return None
     return None
 
