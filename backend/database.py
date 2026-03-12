@@ -28,6 +28,7 @@ def get_db_connection():
             user=user,
             password=password,
             connection_timeout=20,
+            use_pure=True,      # Force pure Python to fix 'ssl_mode' support
             ssl_mode='REQUIRED' # This is the standard way to enforce SSL in modern mysql-connector
         )
         
