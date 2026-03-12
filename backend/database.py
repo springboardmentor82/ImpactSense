@@ -3,35 +3,43 @@ import os
 from mysql.connector import Error
 
 def get_db_connection():
-    host = os.getenv("DB_HOST", "localhost")
+    host_raw = os.getenv("DB_HOST", "localhost")
     user = os.getenv("DB_USER", "root")
     password = os.getenv("DB_PASSWORD", "Joffy123456789@0")
     db_name = os.getenv("DB_NAME", "impactsense")
     
+    # Clean host and extract port if present (e.g., "host:3306")
+    port = 3306
+    if ":" in host_raw:
+        host, port_str = host_raw.split(":")
+        try:
+            port = int(port_str)
+        except ValueError:
+            pass
+    else:
+        host = host_raw
+
     try:
-        # Connect with SSL enabled and a longer timeout for cloud environments
+        # Connect with explicit port and SSL configuration
         conn = mysql.connector.connect(
             host=host,
+            port=port,
             user=user,
             password=password,
-            connection_timeout=20, # 20 second timeout
-            ssl_disabled=False     # Aiven requires SSL
+            connection_timeout=20,
+            ssl_disabled=False # Enable SSL
         )
         
         if conn.is_connected():
             cursor = conn.cursor()
-            # Create database if it doesn't exist
             cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}")
             cursor.close()
-            # Now switch to the database
             conn.database = db_name
             return conn
             
     except Error as e:
         print(f"CRITICAL SQL ERROR: {e}")
-        # Log specific helpful hints for Error 2003/110
-        if "2003" in str(e) or "110" in str(e):
-            print("HINT: This is a connection timeout. Check Aiven IP filters and DB_HOST format on Render.")
+        print(f"Attempted connection to {host}:{port}")
         return None
     return None
 
