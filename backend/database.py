@@ -20,7 +20,8 @@ def get_db_connection():
         host = host_raw
 
     try:
-        # Aiven requires SSL. 'REQUIRED' ensures we don't fall back to plaintext.
+        # Aiven requires SSL. Using 'ssl_disabled=False' for maximum compatibility 
+        # with different versions of mysql-connector-python.
         print(f"DEBUG: Attempting connection to {host} on port {port} as user {user}")
         conn = mysql.connector.connect(
             host=host,
@@ -28,8 +29,8 @@ def get_db_connection():
             user=user,
             password=password,
             connection_timeout=20,
-            use_pure=True,      # Force pure Python to fix 'ssl_mode' support
-            ssl_mode='REQUIRED' # This is the standard way to enforce SSL in modern mysql-connector
+            use_pure=True,
+            ssl_disabled=False # This forces SSL on for Aiven
         )
         
         if conn.is_connected():
@@ -42,7 +43,6 @@ def get_db_connection():
             
     except Error as e:
         print(f"CRITICAL SQL ERROR: {e}")
-        print(f"Full Error Details: {str(e)}")
         return None
     return None
 
