@@ -174,7 +174,7 @@ const Home = () => {
             <DefinitionItem 
               term="SIGNIFICANCE" 
               label="Event Impact Score"
-              def="A composite value (0-1000) representing the overall impact of an earthquake, calculated based on magnitude, intensity, and reported effects."
+              def="A composite value (0-3000) representing the overall impact of an earthquake, calculated based on magnitude, intensity, and reported effects."
             />
           </div>
         </motion.div>
