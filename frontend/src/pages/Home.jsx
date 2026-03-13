@@ -14,6 +14,18 @@ const Home = () => {
     }
   };
 
+  const glitchVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1, 
+      transition: { 
+        duration: 0.2, 
+        repeat: 3, 
+        repeatType: "reverse"
+      } 
+    }
+  };
+
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
@@ -29,13 +41,22 @@ const Home = () => {
       >
         <motion.div variants={itemVariants} className="mb-6 inline-flex items-center space-x-2 px-4 py-1.5 holo-panel">
           <span className="w-2.5 h-2.5 rounded-sm bg-cyan-400 animate-pulse shadow-[0_0_8px_var(--neon-cyan)]"></span>
-          <span className="text-[0.65rem] font-bold tracking-[2px] text-cyan-400">CONNECT_STATUS: ONLINE</span>
+          <span className="text-[0.65rem] font-bold tracking-[2px] text-cyan-400">NEURAL_ORCHESTRATION_ACTIVE</span>
         </motion.div>
 
         <motion.h1 
           variants={itemVariants} 
-          className="text-4xl md:text-6xl font-black tracking-[8px] mb-8 text-white uppercase"
+          className="text-4xl md:text-6xl font-black tracking-[8px] mb-8 text-white uppercase relative"
         >
+          <motion.span 
+            variants={glitchVariants} 
+            initial="hidden" 
+            animate="visible" 
+            className="absolute inset-0 text-cyan-400/30 -z-10 translate-x-1"
+          >
+            EARTHQUAKE_IMPACT <br className="hidden md:block"/>
+            NEURAL_ANALYSIS
+          </motion.span>
           EARTHQUAKE_IMPACT <br className="hidden md:block"/>
           <span className="text-cyan-400 drop-shadow-[0_0_15px_var(--glow-cyan)]">NEURAL_ANALYSIS</span>
         </motion.h1>
@@ -44,7 +65,7 @@ const Home = () => {
           variants={itemVariants}
           className="text-[0.8rem] text-white/70 max-w-2xl mb-12 leading-relaxed tracking-widest uppercase font-mono"
         >
-          {'>'} Utilizing advanced machine learning pipelines to analyze seismic data in real-time. Input telemetry vectors for instant alert categorization.
+          {'>'} Orchestrating deep-layer neural mesh for seismic anomaly detection. The system anticipates earth-shattering vectors before they manifest in reality.
         </motion.p>
 
         <motion.div variants={itemVariants} className="mb-20">
@@ -56,39 +77,67 @@ const Home = () => {
           </button>
         </motion.div>
 
+        <SystemInterlude label="HANDSHAKE_COMPLETE" status="SECURE" delay={1.2} />
+
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2, duration: 1 }}
+          className="absolute bottom-10 flex flex-col items-center gap-2 cursor-pointer group"
+          onClick={() => window.scrollTo({ top: window.innerHeight - 80, behavior: 'smooth' })}
+        >
+          <span className="text-[0.6rem] font-black tracking-[4px] text-cyan-400 uppercase opacity-40 group-hover:opacity-100 transition-opacity">Scroll to Explore</span>
+          <motion.div 
+            animate={{ y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="w-1 h-6 bg-gradient-to-b from-cyan-400/50 to-transparent rounded-full"
+          />
+        </motion.div>
+
         <motion.div 
           variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left mt-20"
         >
+          <div className="md:col-span-3 mb-6">
+            <span className="text-[0.65rem] font-black text-cyan-400 tracking-[4px] uppercase">VECTOR_EXTRACTION_MODULES</span>
+          </div>
           <FeatureCard 
             icon={<Activity className="text-secondary w-6 h-6" />}
-            title="Seismic Parameters"
-            desc="Analyze CDI, MMI, and magnitude vectors instantly."
+            title="Seismic Vectoring"
+            desc="Deconstructing CDI and MMI telemetry into actionable neural signatures."
             delay={0.4}
           />
           <FeatureCard 
             icon={<Zap className="text-accent w-6 h-6" />}
-            title="Real-time Inference"
-            desc="Under 50ms latency for complete alert categorization."
+            title="Neural Inference"
+            desc="Low-latency categorization of subterranean disruption events."
             delay={0.6}
           />
           <FeatureCard 
             icon={<ShieldAlert className="text-danger w-6 h-6" />}
-            title="Actionable Alerts"
-            desc="Clear, color-coded threat assessments for rapid response."
+            title="Alert Synthesis"
+            desc="Direct distillation of threat levels for rapid defensive maneuvers."
             delay={0.8}
           />
         </motion.div>
+
+        <SystemInterlude label="PLANETARY_GRID" status="SYNCED" delay={2} />
 
         <motion.div 
           variants={itemVariants}
           className="mt-32 w-full text-left"
         >
+          <div className="flex items-center gap-4 mb-6">
+            <span className="text-[0.65rem] font-black text-cyan-400 tracking-[4px] uppercase">PLANETARY_INTERCEPT_STREAM</span>
+          </div>
+          
           <CyberEarth />
           
+          <SystemInterlude label="DATABASE_DECRYPTION" status="READY" delay={3} />
+
           <div className="flex items-center gap-4 mt-32 mb-12">
             <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"></div>
-            <h2 className="text-xl font-black tracking-[4px] text-cyan-400 uppercase">Seismic_Glossary</h2>
+            <h2 className="text-xl font-black tracking-[4px] text-cyan-400 uppercase">KNOWLEDGE_DECRYPTION_LOGS</h2>
             <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"></div>
           </div>
 
@@ -135,6 +184,22 @@ const DefinitionItem = ({ term, label, def }) => (
       {def}
     </p>
   </div>
+);
+
+const SystemInterlude = ({ label, status, delay }) => (
+  <motion.div 
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    transition={{ duration: 0.5, delay }}
+    className="w-full flex items-center justify-start gap-4 my-8 font-mono"
+  >
+    <span className="text-[0.6rem] text-white/20">[{new Date().toLocaleTimeString()}]</span>
+    <span className="text-[0.6rem] text-cyan-400 font-bold uppercase tracking-widest">{label}</span>
+    <div className="h-[1px] flex-1 bg-cyan-400/10"></div>
+    <span className="text-[0.6rem] text-cyan-400/60 uppercase tracking-tighter cursor-default hover:text-cyan-400 transition-colors">
+        STATUS: <span className="text-cyan-400">{status}</span>
+    </span>
+  </motion.div>
 );
 
 const FeatureCard = ({ icon, title, desc, delay }) => (
