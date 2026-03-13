@@ -32,12 +32,13 @@ const Home = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-[calc(100vh-80px)] px-4 pb-20 relative overflow-hidden">
+    <div className="flex flex-col items-center px-4 pb-20 relative overflow-hidden">
+      {/* Hero Section */}
       <motion.div 
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="max-w-4xl w-full flex flex-col items-center text-center z-10 pt-20"
+        className="relative w-full min-h-[calc(100vh-80px)] flex flex-col items-center text-center z-10 pt-20"
       >
         <motion.div variants={itemVariants} className="mb-6 inline-flex items-center space-x-2 px-4 py-1.5 holo-panel">
           <span className="w-2.5 h-2.5 rounded-sm bg-cyan-400 animate-pulse shadow-[0_0_8px_var(--neon-cyan)]"></span>
@@ -93,9 +94,17 @@ const Home = () => {
             className="w-1 h-6 bg-gradient-to-b from-cyan-400/50 to-transparent rounded-full"
           />
         </motion.div>
+      </motion.div>
 
-        <motion.div 
-          variants={containerVariants}
+      {/* Details Section */}
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="max-w-4xl w-full flex flex-col items-center z-10"
+      >
+        <div 
           className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left mt-20"
         >
           <div className="md:col-span-3 mb-6">
@@ -119,7 +128,7 @@ const Home = () => {
             desc="Direct distillation of threat levels for rapid defensive maneuvers."
             delay={0.8}
           />
-        </motion.div>
+        </div>
 
         <SystemInterlude label="PLANETARY_GRID" status="SYNCED" delay={2} />
 
@@ -172,6 +181,7 @@ const Home = () => {
       </motion.div>
     </div>
   );
+
 };
 
 const DefinitionItem = ({ term, label, def }) => (
