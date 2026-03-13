@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Activity, ShieldAlert, Zap } from 'lucide-react';
+import CyberEarth from '../components/CyberEarth';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -83,7 +84,9 @@ const Home = () => {
           variants={itemVariants}
           className="mt-32 w-full text-left"
         >
-          <div className="flex items-center gap-4 mb-12">
+          <CyberEarth />
+          
+          <div className="flex items-center gap-4 mt-32 mb-12">
             <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"></div>
             <h2 className="text-xl font-black tracking-[4px] text-cyan-400 uppercase">Seismic_Glossary</h2>
             <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"></div>
