@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import Predict from './pages/Predict';
 import History from './pages/History';
+import SampleDataset from './pages/SampleDataset';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
@@ -28,6 +29,7 @@ function AnimatedRoutes() {
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Home />} />
           <Route path="/predict" element={<Predict />} />
+          <Route path="/samples" element={<SampleDataset />} />
           <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
         </Routes>
       </motion.div>

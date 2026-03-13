@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Activity, Home, History as HistoryIcon, LogOut, LogIn, Zap } from 'lucide-react';
+import { Activity, Home, History as HistoryIcon, LogOut, LogIn, Zap, Database } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
@@ -10,6 +10,7 @@ const Navbar = () => {
 
   const navItems = [
     { path: '/', label: 'HOME', icon: <Home className="w-4 h-4" />, public: true },
+    { path: '/samples', label: 'SAMPLES', icon: <Database className="w-4 h-4" />, public: true },
     { path: '/predict', label: 'PREDICT', icon: <Zap className="w-4 h-4" />, public: true },
     { path: '/history', label: 'HISTORY', icon: <HistoryIcon className="w-4 h-4" />, public: false },
   ];
