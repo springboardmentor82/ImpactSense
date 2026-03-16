@@ -1,2 +1,0 @@
-# ImpactSense
-Earthquake Prediction System
