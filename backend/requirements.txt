@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pandas
+scikit-learn
+joblib
+passlib[bcrypt]
+PyJWT
+python-multipart
+mysql-connector-python==8.0.33
