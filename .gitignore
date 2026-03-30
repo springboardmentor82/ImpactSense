@@ -1,0 +1,12 @@
+# Ignore the virtual environment
+venv/
+
+# Ignore Python cache files
+__pycache__/
+.ipynb_checkpoints/
+
+# Ignore massive raw datasets (the app doesn't need them to run!)
+data/
+
+# Note: We are NOT ignoring the 'models/' folder because 
+# the web app needs the .pkl file to make predictions online!
