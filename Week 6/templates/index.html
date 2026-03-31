@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ImpactSense Predicator</title>
+        <link rel = "stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+        <style>
+        body{
+            font-family:Arial;
+            background:linear-gradient(120deg,#0f2027,#203a43,#2c5364);
+            color:white;
+            text-align:center;
+        }
+
+        .live-text{
+            color: #ff4d4d;
+            font-weight: bold;
+            animation: blink 1s infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes blink{
+            0%{opacity:1;}
+            50%{opacity:0.3;}
+            100%{opacity:1;}
+        }
+
+        nav {
+            background-color: #0b1a3a;
+            color: white;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        nav a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container{
+            background: white;
+            color: black;
+            width: 420px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 20px rgba(0,0,0,0.4);
+        }
+
+        input{
+            width: 90%;
+            padding: 10px;
+            margin: 8px;
+            border-radius: 6px;
+            border: 1px solid grey;
+        }
+
+        button{
+            background: #2c5364;
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            width: 95%;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover{
+            background: #1b3a4b;
+        }
+
+        /* Alert boxes */
+        .alert{
+            height: 25px;
+            width: 90%;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+            justify-content: center;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        .green{
+            background: #2ecc71;
+            box-shadow: 0 0 10px #2ecc71;
+        }
+        .yellow{
+            background: #f1c40f;
+            box-shadow: 0 0 10px #f1c40f;
+
+        }
+        .orange{
+            background: #e67e22;
+            box-shadow: 0 0 10px #e67e22;
+        }
+        .red{
+            background: #e74c3c;
+            box-shadow: 0 0 10px #e74c3c;
+        }
+
+        @keyframes strongShake {
+            0% { transform: translate(0px, 0px); }
+            20% { transform: translate(-5px, 5px); }
+            40% { transform: translate(5px, 5px); }
+            60% { transform: translate(5px, 5px); }
+            80% { transform: translate(5px, 5px); }
+            100% { transform: translate(0px, 0px); }
+        }
+
+        /* Risk meter */
+        .meter{
+            height: 20px;
+            width: 100%;
+            background: #ddd;
+            border-radius: 10px;
+            margin-top: 15px;
+            margin: 10px 0;
+        }
+
+        .risk-meter-title, .prediction-text {
+            margin: 0;
+            padding-top: 10px;
+        }
+
+        .meter-fill{
+            height: 100%;
+            border-radius: 10px;
+            width: 0%;
+        }
+
+        .dashboard{
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .form-box{
+            width: 350px;
+        }
+
+        .action-buttons{
+            margin: 20px 0;
+        }
+
+        .action-buttons button{
+            width: 400px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .action-buttons button:first-child{
+            color: white
+        }
+
+        .action-buttons button:hover{
+            transform: scale(1.05);
+        }
+
+        .result-box{
+            width: 280px;
+            height: 280px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        #resultContent{
+            transition: none;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(0px, 0px); }
+            25% { transform: translate(2px, -2px); }
+            50% { transform: translate(0px, 0px); }
+            75% { transform: translate(2px, 2px); }
+            100% { transform: translate(0px, 0px); }
+        }
+
+        .green-alert{
+            animation: shake 0.9s infinite;
+        }
+
+        .yellow-alert{
+            animation: shake 0.6s infinite;
+        }
+
+        .orange-alert{
+            animation: strongShake 0.4s infinite;
+        }
+
+        .red-alert{
+            animation: strongShake 0.2s infinite;
+        }
+
+        #quakeImage{
+            border-radius:10px;
+            height: 350px;
+            width: 300px;
+            object-fit: cover;
+            
+        }
+
+        .loading-earth{
+                width:50px;
+                height:50px;
+                align-items: center;
+                animation: spin 1s linear infinite;
+                margin-top:10px;
+        }
+        
+        @keyframes spin{
+            0%{transform:rotate(0deg);}
+            100%{transform:rotate(360deg);}
+        }
+
+        </style>
+    </head>
+    <body>
+        <nav>
+            <h2>Impact Sense - Earthquake Impact Prediction 🌍</h2>
+            <div>
+                <a href="/home">Home 🏠</a>
+                <a href="/login">Login 🔐</a>
+                <a href="/prediction">Prediction⚡</a>
+            </div>
+        </nav>
+
+        <p class="live-text">🔴 LIVE • Monitoring Earth Activity</p>
+
+        <h1><i class="fa-solid fa-earth-americas"></i> ImpactSense</h1>
+        <p>Earthquake Impact Prediction</p>
+
+        <div class="dashboard">
+
+            <!-- LEFT: FORM-->
+            <div class="form-box">
+                <form action="/prediction" method="POST">
+                    <input type="number" step="0.1" name="cdi" required placeholder="CDI">
+                    <input type="number" name="mmi" required placeholder="MMI">
+                    <input type="number" step="0.1" name="magnitude" required placeholder="Magnitude">
+                    <input type="number" name="depth" required placeholder="Depth (km)">
+                    <input type="number" name="sig" required placeholder="Significance (sig)">
+
+                    <button type="submit">
+                        <i class="fa-solid fa-bolt"></i> Predict Impact
+                    </button>
+                </form>
+            </div>
+
+            <!--RIGHT: RESULT-->
+            <div class="result-box" id="result-box">
+
+                <img id="quakeImage" src="{{ url_for('static', filename='Earthquake_new.png') }}" width="320" height="350" 
+                {% if prediction %} style="display:none;" {% endif %}>
+                <div id="loadingArea"></div>
+
+                <!-- RESULT CONTENT -->
+                <div id="resultContent">
+                    {% if prediction %}
+                    <h3 class="prediction-text" style="color: rgb(6, 6, 63)">SESIMIC IMPACT ALERTS</h3>
+                    <h3 class="risk-meter-title" style="color:black;">RISK METER</h3>
+
+                    <div class="meter"> 
+                        <div class="meter-fill" id="riskMeter"></div>
+                    </div>
+
+                    <div class="alert
+                    {% if prediction =='green' %}green{% endif %}
+                    {% if prediction =='yellow' %}yellow{% endif %}
+                    {% if prediction =='orange' %}orange{% endif %}
+                    {% if prediction =='red' %}red{% endif %}
+                    ">
+
+                    Prediction: {{prediction | upper}} Alert
+                    </div>
+
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="loading-earth" style="display:none;">
+                <p>Analyzing Earthquake Impact...</p>
+                <img src="{{ url_for('static', filename='Earth_Sphere.png') }}" class="loading-earth">
+            </div>
+            <audio id="sirenSound" src="{{ url_for('static', filename='siren.mp3') }}"></audio>
+
+            <script>
+                let form = document.querySelector("form");
+                
+                if(form){
+                    form.addEventListener("submit", function(e){
+                        e.preventDefault();
+                        
+                        let resultBox = document.getElementById("result-box");
+                        resultBox.style.justifyContent = "center"
+                        resultBox.innerHTML = `
+                            <p style="color:black; margin:10px 0;">
+                                Analyzing Earthquake Impact...
+                            </p>
+                            <img src="{{ url_for('static', filename='Earth_Sphere.png') }}" class="loading-earth">
+                        `;
+                        setTimeout(()=>{
+                            form.submit();
+                        },2500);
+                    });
+                }
+
+                function resetPage(){
+                    // stop shake effect
+                    document.body.classList.remove("red-alert", "yellow-alert", "orange-alert", "green-alert");
+
+                    //clear result box
+                    let result = document.getElementById("resultContent");
+                    if(result){
+                        result.innerHTML = "";
+                    }
+
+                    // stop siren if playing
+                    let siren = document.getElementById("sirenSound");
+                    if(siren){
+                        siren.pause();
+                        siren.currentTime = 0;
+                    }
+
+                    //Show earthquake image again
+                    let img = document.getElementById("quakeImage");
+                    if(window.lastAlert && alertImages[window.lastAlert]) {
+                        img.src = alertImages[window.lastAlert];
+                        img.style.display = "block";
+                    }
+                }
+            </script>
+            
+            {% if prediction %}
+            <script>
+                let meter = document.getElementById("riskMeter");
+                let alertImages = {
+                    green: "/static/earthquake1.webp",
+                    yellow: "/static/earthquake2.jpg",
+                    orange: "/static/earthquake4.jpeg",
+                    red: "/static/earthquake3.avif"
+                };
+
+                if(meter) {
+                    let alertLevel = "{{prediction}}";
+                    let siren = document.getElementById("sirenSound")
+
+                    // store globally
+                    window.lastAlert = alertLevel;
+
+                    if(alertLevel=="green") {
+                        meter.style.width="25%";
+                        meter.style.background="green";
+                        document.body.classList.add("green-alert");
+                    }
+                    if(alertLevel=="yellow") {
+                        meter.style.width="50%";
+                        meter.style.background="yellow";
+                        document.body.classList.add("yellow-alert");
+                    }
+                    if(alertLevel=="orange") {
+                        meter.style.width="75%";
+                        meter.style.background="orange";
+                        document.body.classList.add("orange-alert");
+                    }
+                    if(alertLevel=="red") {
+                        meter.style.width="100%";
+                        meter.style.background="red";
+                        document.body.classList.add("red-alert");
+                        siren.currentTime = 0;
+                        siren.play();
+                    }
+                }
+            </script>
+
+            {% endif %}
+            
+        </div>
+        <div class="action-buttons">
+            <button type="button" onclick="resetPage()">
+                <i class="fa-solid fa-rotate-left"></i> Reset 
+            </button>
+        </div>
+    </body>
+</html>

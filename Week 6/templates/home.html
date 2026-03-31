@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav>
+  <h2>Impact Sense - Earthquake Impact Prediction 🌍</h2>
+  <div>
+    <a href="/home">Home 🏠</a>
+    <a href="/login">Login 🔐</a>
+    <a href="/prediction">Prediction⚡</a>
+  </div>
+</nav>
+
+<div class="container">
+  <h2>Welcome to Earthquake Impact Predictor</h2>
+
+  <div class="top-section">
+  <div class="info-box">
+    <h3 style="margin-top: 30px;">About the project</h3>
+    <p>This project predicts seismic impact levels based on earthquake parameters.</p>
+    <h3 style="margin-top: 30px;">About Earthquake</h3>
+    <p>Magnitude, Depth, and Intensity help determine earthquake impact severity.</p>
+    <h3 style="margin-top: 30px;">Parameters</h3>
+    <p>Magnitude, Depth, CDI , MMI, Significance, Alert</p>
+  </div>
+  
+  <div class="info-box">
+    <h2 style="text-align:center; margin-top: 30px;">Understanding the Parameters</h2>
+    <p><b>Magnitude🌐 - </b> Measures the energy released during an earthquake.</p>
+    <p><b>Depth⬇️ - </b> How deep the earthquake occurs below the surface.</p>
+    <p><b>MMI📊 - </b> Indicates how strongly the earthquake is felt.</p>
+    <p><b>CDI🧑‍🤝‍🧑 - </b> Based on people's reported experiences.</p>
+    <p><b>Significance⭐ - </b> Overall impact score of the earthquake.</p>
+    <p><b>Alert Level🚨 - </b> Shows severity (Green to Red).</p>
+  </div>
+</div>
+</div>
+
+<h1 style="text-align: center;"><u>DATA VISUALIZATION</u></h1>
+<h3 style="text-align: center;">Section 1: Basic Analysis</h3>
+<!-- IMAGE SECTION -->
+<div class="image-container">
+  <div class="image-box">
+    <img src="/static/Magnitude distribution.png">
+    <div class="image-text">
+      <h2>Magnitude Distribution</h2>
+      <p>Most earthquakes occur in the <br>magnitude range of 6.5 to 7.5.</p>
+    </div>
+  </div>
+
+  <div class="image-box">
+      <img src="/static/Magnitude Vs Depth.png">
+      <div class="image-text">
+        <h2>Magnitude Vs Depth</h2>
+        <p>Earthquakes are more frequent within <br>6.5-7.5 magnitude and 0-100 km depth.</p>
+      </div>
+  </div>
+
+  <div class="image-box">
+    <img src="/static/Depth distribution.png">
+    <div class="image-text">
+      <h2>Depth Distribution</h2>
+      <p>Most earthquakes occur at a<br> depth range of 0-100 km.</p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center; margin-top:20px;">
+    <button id="view-btn" class="view-btn" onclick="showSection()">View More Analysis 👀📈</button>
+</div>
+
+<div id="section2" style="display: none;">
+  <h3 id="section2" style="text-align: center;">Section 2: Model Insights</h3>
+  <div class="image-container">
+    <div class="image-box">
+      <img src="/static/Correlation Matrix.png">
+      <div class="image-text">
+        <h2>Correlation Matrix</h2>
+        <p>This matrix shows the relationship <br>between all the features.</p>
+      </div>
+    </div>
+
+    <div class="image-box">
+      <img src="/static/Feature Importance.png">
+      <div class="image-text">
+        <h2>Feature Importance</h2>
+        <p>Significance (sig) is the most important <br>feature influencing predictions.</p>
+      </div>
+    </div>
+
+    <div class="image-box">
+      <img src="/static/Shap Values.png">
+      <div class="image-text">
+        <h2>Shap Values</h2>
+        <p>MMI has the highest impact <br>on predicting the alert level.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center; margin-top:20px;">
+  <button id="viewBtn" class="view-btn" onclick="showLess()" style="display: none;">View less 📉</button>
+</div>
+
+<script>
+  function showSection() {
+    document.getElementById("section2").style.display = "block";
+    document.getElementById("viewBtn").style.display = "inline-block";
+    document.getElementById("view-btn").style.display = "none";
+  }
+
+  function showLess() {
+    document.getElementById("section2").style.display = "none";
+    document.getElementById("view-btn").style.display = "inline-block";
+    document.getElementById("viewBtn").style.display = "none";
+  }
+</script>
+</body>
+</html>
