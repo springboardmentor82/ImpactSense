@@ -3,20 +3,17 @@ import pandas as pd
 import joblib
 import time
 import plotly.graph_objects as go
-import uuid
+from geopy.geocoders import Nominatim
 
 # --- 1. Page Configuration & Glassmorphism CSS ---
-st.set_page_config(page_title="ImpactSense Global", page_icon="🌍", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Earthquake Predictor Global", page_icon="🌍", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-            
-    /* Hide Streamlit's default audio player */
-    audio {
-        display: none !important;
-    }
+    header[data-testid="stHeader"] { display: none !important; }
+    audio { display: none !important; }
     
     .stApp {
         background-color: #0b132b;
@@ -42,7 +39,6 @@ st.markdown("""
         transform: scale(1.02);
     }
     
-    /* FIX 3: Pure CSS Smooth Scrolling Ticker */
     .ticker-wrap {
         width: 100%;
         overflow: hidden;
@@ -68,68 +64,114 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- 2. State Management ---
+# --- 2. State Management & Routing ---
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
+if 'current_page' not in st.session_state:
+    st.session_state['current_page'] = 'dashboard'
 
-# --- 3. Model Loading ---
+# --- 3. Model Loading & Geocoding ---
 @st.cache_resource
 def load_model():
     return joblib.load('models/earthquake_model.pkl')
 
-# --- 4. Audio Alert Function (Stealth Mode) ---
+@st.cache_data
+def get_location_name(lat, lon):
+    """Translates GPS coordinates into a real city/country name in English."""
+    try:
+        geolocator = Nominatim(user_agent="impactsense_v6")
+        # Forces English translation for all global locations
+        location = geolocator.reverse(f"{lat}, {lon}", exactly_one=True, timeout=3, language='en')
+        if location:
+            address = location.raw.get('address', {})
+            city = address.get('city', address.get('town', address.get('state', '')))
+            country = address.get('country', '')
+            if city and country:
+                return f"{city}, {country}"
+            elif country:
+                return country
+        return "Oceanic / Uninhabited Region"
+    except:
+        return f"Lat: {lat}, Lon: {lon}"
+
+# --- 4. Audio Alert Function ---
 def play_alert_sound():
-    # Force a unique URL so Streamlit plays it every single time
     sound_url = f"https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3?t={time.time()}"
-    
-    # Use Streamlit's native audio, which is now invisible thanks to our CSS!
     st.audio(sound_url, format="audio/mpeg", autoplay=True)
-    
     st.markdown("### 🚨 **[EMERGENCY ALARM SOUNDING]**")
 
 # --- 5. The Login Page ---
 def show_login_page():
     st.markdown("<br><br>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 1.5, 1])
-    
     with col2:
-        # FIX 2: Replaced broken image with a bulletproof CSS-styled Emoji that never fails
         st.markdown("<div style='font-size: 90px; text-align: left;'>🌍</div>", unsafe_allow_html=True)
-        st.markdown("<h1 style='color: #4facfe; margin-top: -20px;'>IMPACTSENSE NEXUS</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='color: #4facfe; margin-top: -20px;'>Earthquake Predictor</h1>", unsafe_allow_html=True)
         st.caption("AUTHORIZED PERSONNEL ONLY | ENCRYPTED CONNECTION")
         st.divider()
-        
         with st.form("login_form"):
             username = st.text_input("Operator ID")
             password = st.text_input("Decryption Key", type="password")
             st.markdown("<br>", unsafe_allow_html=True)
             submit = st.form_submit_button("Login")
-            
             if submit:
                 if username and password == "admin":
-                    st.success("Access Granted. Establishing secure connection to global nodes...")
+                    st.success("Access Granted. Establishing secure connection...")
                     time.sleep(1.5) 
                     st.session_state['logged_in'] = True
+                    st.session_state['current_page'] = 'dashboard'
                     st.rerun()
                 else:
-                    st.error("Access Denied. Ensure credentials are correct. (Hint: 'admin')")
+                    st.error("Access Denied. (Hint: 'admin')")
 
-# --- 6. The Main Application Dashboard ---
+# --- 6. The "About" Page ---
+def show_about_page():
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("⬅️ RETURN TO TERMINAL"):
+        st.session_state['current_page'] = 'dashboard'
+        st.rerun()
+        
+    st.markdown("<h1 style='color: #4facfe;'>Earthquake Predictor: System Architecture</h1>", unsafe_allow_html=True)
+    st.divider()
+    
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        st.markdown("""
+        ### 🌍 Project Overview
+        Earthquakes are one of the most devastating natural disasters on the planet. **Earthquake Predictor** is an advanced machine learning predictive terminal designed to analyze real-time geospatial telemetry and assess the risk of catastrophic seismic events.
+        
+        Unlike traditional models that only look at one variable, this system evaluates the normalized depth of a faultline against the historical average magnitude of that specific geographic region to calculate an AI confidence probability.
+        
+        ### 🧠 Machine Learning Engine
+        At the core of Earthquake Predictor is a **Random Forest Classifier**.
+        * **Ensemble Learning:** The AI utilizes 100 individual decision trees to vote on the most likely outcome, dramatically reducing false positives.
+        * **Hyperparameter Tuned:** Optimized using `GridSearchCV` for maximum F1-score accuracy.
+        * **Geospatial Clustering:** Features engineered using K-Means clustering to create the `Regional Hazard Coefficient`.
+        
+        ### 💻 Technology Stack
+        * **Frontend & Routing:** Streamlit with Custom CSS
+        * **Visual Render Engine:** Plotly Graph Objects (3D Orthographic Projection)
+        * **Model Architecture:** Scikit-Learn, Pandas, NumPy
+        * **Geospatial Intelligence:** Geopy (Nominatim API)
+        """)
+    with col2:
+        st.info("""
+        **System Specifications:**
+        
+        * **Version:** v6.2.0 (Master Build)
+        * **Status:** Deployment Ready
+        * **Developer:** Admin Operator
+        """)
+        st.markdown("<div style='font-size: 150px; text-align: center; margin-top: 20px;'>🛰️</div>", unsafe_allow_html=True)
+        st.caption("*Disclaimer: This application is a prototype built for educational purposes. In the event of an actual emergency, always defer to official government broadcasting.*")
+
+# --- 7. The Main Dashboard ---
 def show_dashboard():
     model = load_model()
     
-    # Smooth CSS Ticker
-    st.markdown("""
-        <div class="ticker-wrap">
-            <div class="ticker">
-                🟢 LIVE FEED >> M 2.1 ALASKA | M 3.4 CHILE | M 1.2 CALIFORNIA | 🔴 HIGH RISK ANOMALY DETECTED IN SECTOR 7 | 🟢 SENSOR GRID STABLE...
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-    
     with st.sidebar:
         st.markdown("<div style='font-size: 60px;'>🌍</div>", unsafe_allow_html=True)
-        st.title("ImpactSense")
+        st.title("Earthquake Predictor")
         st.caption("GLOBAL SENSOR NETWORK")
         st.divider()
         st.write("👤 **Operator:** Admin")
@@ -140,8 +182,14 @@ def show_dashboard():
             st.session_state['logged_in'] = False
             st.rerun()
 
-    st.markdown("<h2>Global Seismic Threat Terminal</h2>", unsafe_allow_html=True)
-    st.markdown("Input local telemetry below to trigger the predictive analysis engine.")
+    head_col1, head_col2 = st.columns([5, 1])
+    with head_col1:
+        st.markdown("<h2 style='color: #e0eef7; margin-top: -15px;'>Global Seismic Threat Terminal</h2>", unsafe_allow_html=True)
+        st.markdown("Input local telemetry below to trigger the predictive analysis engine.")
+    with head_col2:
+        if st.button("ℹ️ ABOUT"):
+            st.session_state['current_page'] = 'about'
+            st.rerun()
     
     tab1, tab2 = st.tabs(["🎯 Live Targeting", "📈 Grid Diagnostics"])
     
@@ -157,12 +205,11 @@ def show_dashboard():
         st.markdown("<br>", unsafe_allow_html=True)
         
         if st.button("RUN PREDICTION PROTOCOL"):
-            
             terminal = st.empty()
             logs = [
                 "Establishing secure satellite uplink...", 
                 "Calibrating geospatial coordinates...", 
-                "Injecting Z-Score variables into Random Forest matrices...", 
+                "Reverse geocoding target location...",
                 "Calculating SHAP confidence probabilities...", 
                 "Finalizing structural diagnostic..."
             ]
@@ -170,8 +217,10 @@ def show_dashboard():
             for log in logs:
                 terminal_text += f"> {log}\n"
                 terminal.code(terminal_text, language="bash")
-                time.sleep(0.4)
+                time.sleep(0.3)
             terminal.empty() 
+            
+            location_name = get_location_name(latitude, longitude)
             
             input_data = pd.DataFrame([[depth_scaled, latitude, longitude, location_risk]], 
                                       columns=['depth_scaled', 'latitude', 'longitude', 'location_risk_score'])
@@ -188,39 +237,45 @@ def show_dashboard():
                 st.subheader("Diagnostic Output:")
                 if prediction[0] == 1:
                     play_alert_sound()
-                    st.error("🚨 **CRITICAL HAZARD DETECTED**")
+                    st.error(f"🚨 **CRITICAL HAZARD DETECTED: {location_name.upper()}**")
                     st.write("Telemetry aligns with catastrophic seismic profiles. Evacuation protocols advised.")
                     st.progress(int(confidence_score), text=f"AI Threat Confidence: {confidence_score:.1f}%")
                 else:
-                    st.success("✅ **STATUS: NOMINAL (LOW RISK)**")
+                    st.success(f"✅ **STATUS: NOMINAL (LOW RISK) IN {location_name.upper()}**")
                     st.write("Structural integrity holding. No severe seismic anomalies detected.")
                     st.progress(int(confidence_score), text=f"AI Safety Confidence: {confidence_score:.1f}%")
                 
-                st.markdown("<br>**Live Target Tracking:**", unsafe_allow_html=True)
-                map_data = pd.DataFrame({'lat': [latitude], 'lon': [longitude]})
-                st.map(map_data, zoom=4)
+                st.markdown("<br><b>Telemetry Signature:</b>", unsafe_allow_html=True)
+                categories = ['Depth Impact', 'Regional Risk', 'Lat Anomaly', 'Lon Anomaly']
+                fig_radar = go.Figure(go.Scatterpolar(
+                    r=[abs(depth_scaled)*3, location_risk, abs(latitude)/10, abs(longitude)/20],
+                    theta=categories, fill='toself', line_color='#00f2fe', fillcolor='rgba(0, 242, 254, 0.2)'
+                ))
+                fig_radar.update_layout(polar=dict(radialaxis=dict(visible=False)), showlegend=False, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color='#e0eef7', size=14), margin=dict(l=20, r=20, t=20, b=20))
+                st.plotly_chart(fig_radar, use_container_width=True)
 
             with res_col2:
-                st.subheader("Telemetry Signature:")
-                categories = ['Depth Impact', 'Regional Risk', 'Lat Anomaly', 'Lon Anomaly']
-                fig = go.Figure()
-                fig.add_trace(go.Scatterpolar(
-                    r=[abs(depth_scaled)*3, location_risk, abs(latitude)/10, abs(longitude)/20],
-                    theta=categories,
-                    fill='toself',
-                    line_color='#00f2fe',
-                    fillcolor='rgba(0, 242, 254, 0.2)'
+                st.subheader("Live Geospatial Target:")
+                # --- RESTORED 3D GLOBE WITH CITY NAME ---
+                fig_map = go.Figure(go.Scattergeo(
+                    lon = [longitude],
+                    lat = [latitude],
+                    text = [f"📍 {location_name}"], 
+                    mode = 'markers+text',
+                    textposition = "top center",
+                    textfont = dict(color="#4facfe", size=16, family="Arial Black"),
+                    marker = dict(size = 12, color = 'red', line_color='white', line_width=1.5)
                 ))
-                fig.update_layout(
-                    polar=dict(radialaxis=dict(visible=False)),
-                    showlegend=False,
-                    paper_bgcolor='rgba(0,0,0,0)',
-                    plot_bgcolor='rgba(0,0,0,0)',
-                    font=dict(color='#e0eef7', size=14),
-                    margin=dict(l=20, r=20, t=20, b=20)
+                fig_map.update_layout(
+                    geo = dict(
+                        projection_type = 'orthographic', # This brings the 3D planet back!
+                        showland = True, landcolor = '#112240', countrycolor = '#4facfe',
+                        bgcolor = 'rgba(0,0,0,0)', showocean = True, oceancolor = 'rgba(11, 19, 43, 0.5)', coastlinecolor = '#4facfe',
+                    ),
+                    margin=dict(l=0, r=0, t=0, b=0), paper_bgcolor='rgba(0,0,0,0)'
                 )
-                st.plotly_chart(fig, use_container_width=True)
-                st.caption("*(Fig 1: Real-time telemetry compared to historical danger baselines)*")
+                st.plotly_chart(fig_map, use_container_width=True)
+                st.caption(f"*(Fig 2: 3D Satellite Lock on {location_name} - Click and Drag to Rotate)*")
 
     with tab2:
         st.subheader("Core System Diagnostics")
@@ -229,8 +284,10 @@ def show_dashboard():
         m2.metric(label="Model F1-Score", value="94.2%", delta="Optimal")
         m3.metric(label="Server Nodes", value="14/14 Active", delta="0 Offline")
 
-# --- 7. Routing Logic ---
-if st.session_state['logged_in']:
-    show_dashboard()
-else:
+# --- 8. Master Application Router ---
+if not st.session_state['logged_in']:
     show_login_page()
+elif st.session_state['current_page'] == 'about':
+    show_about_page()
+else:
+    show_dashboard()
