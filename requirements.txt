@@ -1,9 +1,7 @@
+streamlit
 pandas
 numpy
-matplotlib
-seaborn
 scikit-learn
-xgboost
-shap
-streamlit
+plotly
+geopy
 joblib
