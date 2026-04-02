@@ -4,37 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SeismoTerm-88 | Login</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Space Grotesk', sans-serif; background:#131313; color:#e5e2e1; }
+    body { margin:0; font-family:'Space Grotesk',sans-serif; background:#131313; color:#e5e2e1; min-height:100vh; display:grid; place-items:center; }
+    .card { width:min(560px,92vw); background:#1c1b1b; border:1px solid #3b4b37; padding:28px; }
+    .label { font-size:12px; color:#72ff70; letter-spacing:.2em; }
+    h1 { margin:8px 0 18px; color:#00ff41; }
+    input { width:100%; background:#111; border:1px solid #3b4b37; color:#00ff41; padding:12px; font-size:16px; }
+    button { margin-top:14px; width:100%; padding:12px; border:none; background:#00ff41; color:#081d0d; font-weight:800; letter-spacing:.08em; }
+    .err { margin-top:10px; color:#ffb4ab; font-size:13px; }
+    a { display:inline-block; margin-top:12px; color:#9fb39a; font-size:12px; }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center px-6">
-  <section class="w-full max-w-xl bg-[#1c1b1b] border border-[#3b4b37] p-8">
-    <p class="text-xs text-[#72ff70] tracking-[0.25em]">SYSTEM_ACCESS_NODE // 0X88_DELTA</p>
-    <h1 class="text-3xl font-black text-[#00ff41] mt-2">USER_IDENTIFICATION_REQUIRED</h1>
-
-    <form id="loginForm" class="mt-8 space-y-5">
-      <label class="block text-xs tracking-widest text-[#9fb39a]">OPERATOR_NAME</label>
-      <input id="displayName" type="text" maxlength="30" required class="w-full bg-[#111] border border-[#3b4b37] p-3 text-[#00ff41]" placeholder="TYPE_NAME_HERE">
-      <button type="submit" class="w-full bg-[#00ff41] text-black py-3 font-bold tracking-wider">ENTER_APP</button>
+<body>
+  <section class="card">
+    <div class="label">SYSTEM_ACCESS_NODE // 0X88_DELTA</div>
+    <h1>USER_IDENTIFICATION_REQUIRED</h1>
+    <form id="loginForm">
+      <input id="displayName" type="text" maxlength="30" required placeholder="TYPE_NAME_HERE">
+      <button type="submit">ENTER_APP</button>
     </form>
-
-    <p id="err" class="hidden mt-4 text-[#ffb4ab] text-sm"></p>
-    <a href="/" class="inline-block mt-6 text-xs text-[#9fb39a]">RETURN_TO_LANDING</a>
+    <p id="err" class="err" style="display:none"></p>
+    <a href="/">RETURN_TO_LANDING</a>
   </section>
-
   <script>
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('displayName').value.trim();
+      const err = document.getElementById('err');
       if (!name) {
-        const err = document.getElementById('err');
         err.textContent = 'Please enter a name.';
-        err.classList.remove('hidden');
+        err.style.display = 'block';
         return;
       }
       localStorage.setItem('impact_user', name);

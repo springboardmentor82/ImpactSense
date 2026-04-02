@@ -4,97 +4,85 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SeismoTerm-88 | Predictor</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Space Grotesk', sans-serif; background:#131313; color:#e5e2e1; }
+    body { margin:0; font-family:'Space Grotesk',sans-serif; background:#131313; color:#e5e2e1; }
+    .top { height:64px; border-bottom:1px solid #3b4b37; display:flex; align-items:center; justify-content:space-between; padding:0 20px; }
+    .brand { color:#00ff41; font-weight:800; letter-spacing:.2em; font-size:.8rem; }
+    .nav { display:flex; gap:12px; align-items:center; font-size:12px; }
+    .nav a, .nav button { color:#9fb39a; text-decoration:none; background:none; border:none; cursor:pointer; }
+    .grid { max-width:1200px; margin:0 auto; padding:24px; display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
+    .panel { background:#1c1b1b; border:1px solid #3b4b37; padding:18px; }
+    .field { margin-bottom:10px; }
+    .field label { display:block; font-size:12px; color:#9fb39a; margin-bottom:4px; }
+    .field input { width:100%; background:#111; border:1px solid #3b4b37; color:#00ff41; padding:10px; }
+    .row3 { display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; }
+    .btn { width:100%; margin-top:8px; border:none; background:#00ff41; color:#081d0d; padding:12px; font-weight:800; letter-spacing:.08em; }
+    .muted { color:#9fb39a; font-size:12px; }
+    .target { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border:1px solid #000; font-weight:800; color:#111; }
+    .score { font-size:52px; color:#00ff41; margin:8px 0; font-weight:800; }
+    .risk { font-size:34px; color:#72ff70; margin:6px 0; font-weight:800; }
+    .prob-item { margin:10px 0; }
+    .prob-top { display:flex; justify-content:space-between; font-size:12px; }
+    .bar { height:8px; background:#353534; margin-top:4px; }
+    .fill { height:100%; }
+    .digest { margin-top:14px; border-top:1px solid #3b4b37; padding-top:10px; display:flex; flex-wrap:wrap; gap:6px; }
+    .chip { background:#2a2a2a; border:1px solid #3b4b37; font-size:10px; padding:4px 8px; }
+    .hidden { display:none; }
+    .err { margin-top:8px; color:#ffb4ab; font-size:13px; }
     .shake-min { animation:none; }
     .shake-light { animation: quake .35s linear 2; }
     .shake-medium { animation: quake .22s linear 5; }
     .shake-heavy { animation: quake .14s linear 8; }
     @keyframes quake { 0%{transform:translate(0,0)} 25%{transform:translate(1px,-1px)} 50%{transform:translate(-1px,1px)} 75%{transform:translate(1px,1px)} 100%{transform:translate(0,0)} }
+    @media (max-width: 900px) { .grid { grid-template-columns:1fr; } .row3 { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
-  <header class="h-16 px-6 border-b border-[#3b4b37] flex items-center justify-between bg-[#131313] sticky top-0">
-    <div class="text-[#00ff41] font-bold tracking-[0.2em] text-sm">SEISMIC_PREDICTOR_INTERFACE</div>
-    <div class="flex items-center gap-4 text-xs">
-      <span id="userTag" class="text-[#72ff70]"></span>
-      <a href="/" class="text-[#9fb39a]">DASHBOARD</a>
-      <button id="logoutBtn" class="text-[#9fb39a]">LOGOUT</button>
+  <header class="top">
+    <div class="brand">SEISMIC_PREDICTOR_INTERFACE</div>
+    <div class="nav">
+      <span id="userTag"></span>
+      <a href="/">DASHBOARD</a>
+      <button id="logoutBtn">LOGOUT</button>
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto p-6 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
-    <section class="lg:col-span-5 bg-[#1c1b1b] border border-[#3b4b37] p-8">
-      <p class="text-xs tracking-[0.2em] text-[#72ff70]">PARAMETER_INPUT_V02</p>
-      <form id="predictForm" class="space-y-5 mt-6">
-        <div>
-          <label class="block text-xs text-[#9fb39a] mb-1">MAGNITUDE</label>
-          <input name="magnitude" type="number" step="0.01" min="0" max="10" required class="w-full bg-[#111] border border-[#3b4b37] p-3 text-[#00ff41]" />
+  <main class="grid">
+    <section class="panel">
+      <p class="muted">PARAMETER_INPUT_V02</p>
+      <form id="predictForm">
+        <div class="field"><label>MAGNITUDE</label><input name="magnitude" type="number" step="0.01" min="0" max="10" required></div>
+        <div class="field"><label>DEPTH</label><input name="depth" type="number" step="0.01" min="0" max="700" required></div>
+        <div class="row3">
+          <div class="field"><label>CDI</label><input name="cdi" type="number" step="0.01" min="0" max="12" required></div>
+          <div class="field"><label>MMI</label><input name="mmi" type="number" step="0.01" min="0" max="12" required></div>
+          <div class="field"><label>SIG</label><input name="sig" type="number" step="0.01" min="0" max="1200" required></div>
         </div>
-        <div>
-          <label class="block text-xs text-[#9fb39a] mb-1">DEPTH</label>
-          <input name="depth" type="number" step="0.01" min="0" max="700" required class="w-full bg-[#111] border border-[#3b4b37] p-3 text-[#00ff41]" />
-        </div>
-        <div class="grid grid-cols-3 gap-3">
-          <div>
-            <label class="block text-xs text-[#9fb39a] mb-1">CDI</label>
-            <input name="cdi" type="number" step="0.01" min="0" max="12" required class="w-full bg-[#111] border border-[#3b4b37] p-3 text-[#00ff41]" />
-          </div>
-          <div>
-            <label class="block text-xs text-[#9fb39a] mb-1">MMI</label>
-            <input name="mmi" type="number" step="0.01" min="0" max="12" required class="w-full bg-[#111] border border-[#3b4b37] p-3 text-[#00ff41]" />
-          </div>
-          <div>
-            <label class="block text-xs text-[#9fb39a] mb-1">SIG</label>
-            <input name="sig" type="number" step="0.01" min="0" max="1200" required class="w-full bg-[#111] border border-[#3b4b37] p-3 text-[#00ff41]" />
-          </div>
-        </div>
-
-        <button type="submit" class="w-full bg-[#00ff41] text-black py-3 font-bold tracking-wider">RUN_PREDICTION_ENGINE</button>
+        <button class="btn" type="submit">RUN_PREDICTION_ENGINE</button>
       </form>
-      <p id="errorText" class="hidden mt-4 text-[#ffb4ab] text-sm"></p>
+      <p id="errorText" class="err hidden"></p>
     </section>
 
-    <section id="resultBox" class="lg:col-span-7 bg-[#1c1b1b] border border-[#3b4b37]">
-      <div class="p-6 border-b border-[#3b4b37] flex justify-between">
-        <h3 class="font-bold tracking-wider">PREDICTION_RESULT</h3>
-        <span class="text-xs text-[#9fb39a]">ID: ST-88-LIVE</span>
+    <section id="resultBox" class="panel">
+      <h3 style="margin-top:0">PREDICTION_RESULT</h3>
+      <div id="resultEmpty" class="muted">NO_PREDICTION_YET. INPUT_PARAMETERS_AND_RUN_ENGINE.</div>
+
+      <div id="resultContent" class="hidden">
+        <p class="muted">TARGET CLASS</p>
+        <div id="targetBadge" class="target"><span>!</span><span id="targetText"></span></div>
+        <p class="muted" style="margin-top:16px">IMPACT SCORE</p>
+        <div id="impactText" class="score"></div>
+        <p class="muted">RISK LEVEL</p>
+        <div id="riskText" class="risk"></div>
+
+        <p class="muted" style="margin-top:14px">PROBABILITY MAP</p>
+        <div id="probList"></div>
       </div>
 
-      <div id="resultEmpty" class="p-10 text-sm text-[#9fb39a]">NO_PREDICTION_YET. INPUT_PARAMETERS_AND_RUN_ENGINE.</div>
-
-      <div id="resultContent" class="hidden p-8 grid grid-cols-1 md:grid-cols-2 gap-10">
-        <div>
-          <p class="text-xs text-[#9fb39a]">TARGET CLASS</p>
-          <div id="targetBadge" class="inline-flex items-center gap-3 px-6 py-2 mt-2 border border-black">
-            <span>!</span><span id="targetText" class="font-black text-2xl tracking-tight"></span>
-          </div>
-
-          <div class="mt-8">
-            <p class="text-xs text-[#9fb39a]">IMPACT SCORE</p>
-            <p id="impactText" class="text-5xl font-black text-[#00ff41]"></p>
-          </div>
-
-          <div class="mt-6">
-            <p class="text-xs text-[#9fb39a]">RISK LEVEL</p>
-            <p id="riskText" class="text-3xl font-black text-[#72ff70]"></p>
-          </div>
-        </div>
-
-        <div>
-          <p class="text-xs text-[#9fb39a] mb-4">PROBABILITY MAP</p>
-          <div id="probList" class="space-y-5"></div>
-        </div>
-      </div>
-
-      <div id="digestWrap" class="hidden p-6 bg-[#0e0e0e] border-t border-[#3b4b37]">
-        <p class="text-xs text-[#9fb39a] mb-3">INPUT VECTOR DIGEST</p>
-        <div id="digestList" class="flex flex-wrap gap-2"></div>
-      </div>
+      <div id="digestWrap" class="digest hidden"></div>
     </section>
   </main>
 
@@ -134,18 +122,14 @@
         const contentType = res.headers.get('content-type') || '';
         const isJson = contentType.includes('application/json');
         const data = isJson ? await res.json() : null;
+
         if (!res.ok) {
-          if (data && data.error) {
-            throw new Error(data.error);
-          }
+          if (data && data.error) throw new Error(data.error);
           const fallback = await res.text();
           throw new Error(`Prediction failed (${res.status}). ${fallback.slice(0, 120)}`);
         }
 
-        if (!data) {
-          throw new Error('Prediction failed: API returned non-JSON response.');
-        }
-
+        if (!data) throw new Error('Prediction failed: API returned non-JSON response.');
         renderResult(data);
       } catch (err) {
         errorEl.textContent = err.message;
@@ -160,7 +144,6 @@
 
       document.getElementById('resultEmpty').classList.add('hidden');
       document.getElementById('resultContent').classList.remove('hidden');
-      document.getElementById('digestWrap').classList.remove('hidden');
 
       const target = data.predicted_class.toUpperCase();
       const badge = document.getElementById('targetBadge');
@@ -176,23 +159,20 @@
       Object.entries(data.probabilities).forEach(([label, value]) => {
         const color = classColors[label] || '#00ff41';
         const row = document.createElement('div');
+        row.className = 'prob-item';
         row.innerHTML = `
-          <div class="flex justify-between text-xs">
-            <span>${label.toUpperCase()}</span>
-            <span style="color:${color}">${value}%</span>
-          </div>
-          <div class="h-2 bg-[#353534] mt-1">
-            <div style="width:${Math.max(0, Math.min(100, value))}%; background:${color}; height:100%"></div>
-          </div>
+          <div class="prob-top"><span>${label.toUpperCase()}</span><span style="color:${color}">${value}%</span></div>
+          <div class="bar"><div class="fill" style="width:${Math.max(0, Math.min(100, value))}%; background:${color}"></div></div>
         `;
         probList.appendChild(row);
       });
 
-      const digest = document.getElementById('digestList');
+      const digest = document.getElementById('digestWrap');
+      digest.classList.remove('hidden');
       digest.innerHTML = '';
       Object.entries(data.features_used).forEach(([k, v]) => {
         const chip = document.createElement('span');
-        chip.className = 'bg-[#2a2a2a] px-2 py-1 text-[10px] border border-[#3b4b37]';
+        chip.className = 'chip';
         chip.textContent = `${k.toUpperCase()}: ${v}`;
         digest.appendChild(chip);
       });

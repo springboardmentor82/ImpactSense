@@ -4,30 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SEISMO_TERM_88 // TERMINAL</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Space Grotesk', sans-serif; background:#131313; color:#e5e2e1; }
-    .grid-bg { background-image: linear-gradient(rgba(0,255,65,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,65,.06) 1px, transparent 1px); background-size:40px 40px; }
+    body { margin:0; font-family:'Space Grotesk',sans-serif; background:#131313; color:#e5e2e1; }
+    .grid-bg { background-image: linear-gradient(rgba(0,255,65,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,65,.06) 1px, transparent 1px); background-size:40px 40px; min-height:100vh; }
+    .top { height:64px; border-bottom:1px solid #3b4b37; display:flex; align-items:center; justify-content:space-between; padding:0 24px; }
+    .brand { color:#00ff41; font-weight:800; letter-spacing:.2em; font-size:.85rem; }
+    .wrap { max-width:1100px; margin:0 auto; padding:48px 24px; }
+    .title { font-size: clamp(42px, 10vw, 96px); line-height:.85; color:#00ff41; margin:0; }
+    .copy { max-width:720px; border-left:2px solid #00ff41; padding-left:16px; color:#9fb39a; }
+    .actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:20px; }
+    .btn { text-decoration:none; padding:12px 18px; font-weight:700; letter-spacing:.08em; }
+    .btn-primary { background:#00ff41; color:#031b09; }
+    .btn-secondary { border:1px solid #3b4b37; color:#72ff70; }
   </style>
 </head>
-<body class="grid-bg min-h-screen">
-  <header class="h-16 px-6 border-b border-[#3b4b37] flex items-center justify-between bg-[#131313] sticky top-0">
-    <div class="text-[#00ff41] font-bold tracking-[0.2em]">SEISMIC_COMMAND_V1.0</div>
-    <a href="/login" class="text-[#72ff70] text-sm">INITIALIZE_LOGIN</a>
-  </header>
+<body>
+  <div class="grid-bg">
+    <header class="top">
+      <div class="brand">SEISMIC_COMMAND_V1.0</div>
+      <a class="btn btn-secondary" href="/login">LOGIN</a>
+    </header>
 
-  <main class="max-w-6xl mx-auto px-6 py-16">
-    <p class="text-xs tracking-[0.25em] text-[#72ff70]">SYSTEM_INITIALIZATION_READY</p>
-    <h1 class="text-6xl md:text-8xl font-black text-[#00ff41] leading-[0.85] mt-2">SEISMO<br>TERM_88</h1>
-    <p class="mt-6 max-w-2xl border-l-2 border-[#00ff41] pl-4 text-[#9fb39a]">Neural-network seismic impact console. Run class prediction with a serverless backend on Vercel.</p>
-
-    <div class="mt-8 flex flex-wrap gap-4">
-      <a href="/login" class="px-6 py-3 bg-[#00ff41] text-black font-bold tracking-widest">OPEN_SYSTEM</a>
-      <a href="/api/health" class="px-6 py-3 border border-[#3b4b37] text-[#72ff70]">API_HEALTH</a>
-    </div>
-  </main>
+    <main class="wrap">
+      <p style="color:#72ff70; letter-spacing:.25em; font-size:12px; margin:0 0 10px;">SYSTEM_INITIALIZATION_READY</p>
+      <h1 class="title">SEISMO<br>TERM_88</h1>
+      <p class="copy">Neural-network seismic impact console with serverless prediction backend.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="/login">OPEN_SYSTEM</a>
+        <a class="btn btn-secondary" href="/api/health">API_HEALTH</a>
+      </div>
+    </main>
+  </div>
 </body>
 </html>

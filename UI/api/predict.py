@@ -11,8 +11,9 @@ from common import compute_prediction, sanitize_inputs
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET', 'POST', 'OPTIONS'])
-def predict():
+@app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'OPTIONS'])
+@app.route('/<path:path>', methods=['GET', 'POST', 'OPTIONS'])
+def predict(path: str = ''):
     if request.method == 'OPTIONS':
         return ('', 204)
 
