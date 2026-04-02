@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SeismoTerm-88 | SEISMIC_PREDICTOR_INTERFACE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          surface: "#131313",
+          panel: "#1c1b1b",
+          panelhi: "#2a2a2a",
+          outline: "#3b4b37",
+          primary: "#00ff41",
+          soft: "#72ff70",
+          textx: "#e5e2e1",
+          muted: "#b9ccb2"
+        },
+        fontFamily: { body: ["Space Grotesk"] }
+      }
+    }
+  }
+</script>
+<style>
+  body { background-color: #131313; font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; }
+  .scanline-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.1) 50%), linear-gradient(90deg, rgba(255,0,0,0.03), rgba(0,255,0,0.01), rgba(0,0,255,0.03));
+    background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 9999; opacity: 0.1;
+  }
+  .shake-min { animation: none; }
+  .shake-light { animation: quake 0.35s linear 2; }
+  .shake-medium { animation: quake 0.22s linear 5; }
+  .shake-heavy { animation: quake 0.14s linear 8; }
+  @keyframes quake {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-1px, 1px); }
+    40% { transform: translate(1px, -1px); }
+    60% { transform: translate(-1px, 0); }
+    80% { transform: translate(1px, 1px); }
+    100% { transform: translate(0, 0); }
+  }
+</style>
+</head>
+<body class="text-textx selection:bg-primary selection:text-black">
+<div class="scanline-overlay"></div>
+
+<header class="bg-[#131313] shadow-[0_0_10px_rgba(0,255,65,0.1)] flex justify-between items-center w-full px-6 h-16 border-b border-outline/30 sticky top-0 z-50">
+  <div class="flex items-center gap-3">
+    <span class="material-symbols-outlined text-primary">terminal</span>
+    <h1 class="uppercase tracking-[0.2em] text-sm text-primary font-bold">SEISMIC_PREDICTOR_INTERFACE</h1>
+  </div>
+  <div class="hidden md:flex items-center gap-4">
+    <a class="text-soft text-sm uppercase hover:text-primary transition-colors" href="{{ url_for('landing') }}">DASHBOARD</a>
+    <span class="text-white font-black text-sm uppercase">PREDICT</span>
+    <form method="post" action="{{ url_for('logout') }}">
+      <button class="text-soft text-sm uppercase hover:text-primary transition-colors" type="submit">LOGOUT</button>
+    </form>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto p-6 md:p-12 min-h-screen">
+  <section class="mb-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
+    <div>
+      <div class="inline-block bg-panelhi px-3 py-1 mb-4">
+        <span class="text-primary font-mono text-[10px] tracking-widest uppercase">ST-88 // KERNEL_ACTIVE // OPERATOR: {{ user|upper }}</span>
+      </div>
+      <h2 class="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none mb-6">SeismoTerm<span class="text-primary">-88</span></h2>
+      <p class="text-muted max-w-md font-medium leading-relaxed">Neural-assisted tectonic event prediction engine. Input localized seismic metadata to generate probability-weighted impact assessments.</p>
+    </div>
+    <div class="bg-panel p-6 border-l-4 border-primary">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="material-symbols-outlined text-sm text-primary">query_stats</span>
+        <span class="text-[10px] text-primary font-bold uppercase tracking-widest">LIVE_STATUS</span>
+      </div>
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div><div class="text-[10px] text-muted uppercase">Model</div><div class="font-bold">GB_CUSTOM</div></div>
+        <div><div class="text-[10px] text-muted uppercase">Route</div><div class="font-bold">/predict</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <aside class="lg:col-span-5 space-y-6">
+      <div class="bg-panel p-8 relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-10"><span class="material-symbols-outlined text-6xl">settings_input_component</span></div>
+        <div class="flex items-center gap-3 mb-8">
+          <div class="w-2 h-2 bg-primary"></div>
+          <h3 class="text-xs font-black uppercase tracking-[0.3em]">PARAMETER_INPUT_V02</h3>
+        </div>
+
+        <form method="post" action="{{ url_for('predict') }}" class="space-y-6">
+          <div class="group">
+            <label class="block text-[10px] font-bold text-muted uppercase mb-2">01. Magnitude (Richter)</label>
+            <div class="relative flex items-center bg-surface border-b-2 border-outline group-focus-within:border-primary transition-colors p-3">
+              <span class="text-primary font-mono mr-2">&gt;&gt;</span>
+              <input class="w-full bg-transparent border-none text-primary focus:ring-0 p-0 font-mono text-xl" name="magnitude" type="number" step="0.01" min="0" max="10" required value="{{ values.magnitude if values else '' }}"/>
+            </div>
+          </div>
+          <div class="group">
+            <label class="block text-[10px] font-bold text-muted uppercase mb-2">02. Depth (Kilometers)</label>
+            <div class="relative flex items-center bg-surface border-b-2 border-outline group-focus-within:border-primary transition-colors p-3">
+              <span class="text-primary font-mono mr-2">&gt;&gt;</span>
+              <input class="w-full bg-transparent border-none text-primary focus:ring-0 p-0 font-mono text-xl" name="depth" type="number" step="0.01" min="0" max="700" required value="{{ values.depth if values else '' }}"/>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="group">
+              <label class="block text-[10px] font-bold text-muted uppercase mb-2">03. CDI</label>
+              <div class="relative flex items-center bg-surface border-b-2 border-outline group-focus-within:border-primary transition-colors p-3">
+                <input class="w-full bg-transparent border-none text-primary focus:ring-0 p-0 font-mono text-lg text-center" name="cdi" type="number" step="0.01" min="0" max="12" required value="{{ values.cdi if values else '' }}"/>
+              </div>
+            </div>
+            <div class="group">
+              <label class="block text-[10px] font-bold text-muted uppercase mb-2">04. MMI</label>
+              <div class="relative flex items-center bg-surface border-b-2 border-outline group-focus-within:border-primary transition-colors p-3">
+                <input class="w-full bg-transparent border-none text-primary focus:ring-0 p-0 font-mono text-lg text-center" name="mmi" type="number" step="0.01" min="0" max="12" required value="{{ values.mmi if values else '' }}"/>
+              </div>
+            </div>
+            <div class="group">
+              <label class="block text-[10px] font-bold text-muted uppercase mb-2">05. SIG</label>
+              <div class="relative flex items-center bg-surface border-b-2 border-outline group-focus-within:border-primary transition-colors p-3">
+                <input class="w-full bg-transparent border-none text-primary focus:ring-0 p-0 font-mono text-lg text-center" name="sig" type="number" step="0.01" min="0" max="1200" required value="{{ values.sig if values else '' }}"/>
+              </div>
+            </div>
+          </div>
+
+          <button class="w-full bg-primary text-black font-black uppercase tracking-widest py-4 mt-4 hover:bg-soft transition-all active:scale-95 flex items-center justify-center gap-3" type="submit">
+            <span class="material-symbols-outlined">memory</span> RUN_PREDICTION_ENGINE
+          </button>
+        </form>
+
+        {% if error %}
+        <div class="mt-5 p-3 bg-[#93000a1f] border border-[#ffb4ab55] text-[#ffb4ab] text-xs font-bold uppercase tracking-wide">{{ error }}</div>
+        {% endif %}
+      </div>
+    </aside>
+
+    <section class="lg:col-span-7 space-y-8 {% if result %}{{ result.shake_class }}{% endif %}">
+      <div class="bg-panel border border-outline/40 relative">
+        <div class="p-6 bg-panelhi border-b border-outline flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary">analytics</span>
+            <h3 class="text-sm font-black uppercase tracking-widest">PREDICTION_RESULT</h3>
+          </div>
+          <div class="text-[10px] font-mono text-muted uppercase">ID: ST-88-LIVE</div>
+        </div>
+
+        {% if result %}
+        <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div>
+            <div class="mb-8">
+              <div class="text-[10px] text-muted uppercase font-bold mb-2">Target Class</div>
+              <div class="inline-flex items-center gap-3 px-6 py-2 border border-black target-badge" data-target-color="{{ result.target_color }}">
+                <span class="material-symbols-outlined">warning</span>
+                <span class="font-black text-2xl uppercase tracking-tighter">{{ result.predicted_class|upper }}_ALERT</span>
+              </div>
+            </div>
+            <div class="space-y-6">
+              <div>
+                <div class="text-[10px] text-muted uppercase font-bold mb-1">Impact Score</div>
+                <div class="text-5xl font-black text-primary tracking-tighter">{{ result.impact_score }}<span class="text-lg font-medium text-muted">/100.0</span></div>
+              </div>
+              <div>
+                <div class="text-[10px] text-muted uppercase font-bold mb-1">Risk Level</div>
+                <div class="text-2xl font-black text-soft uppercase tracking-widest">{{ result.risk_level }}_EVENT</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="text-[10px] text-muted uppercase font-bold mb-4">Probability Map</div>
+            <div class="space-y-5">
+              {% for k, v in result.probabilities.items() %}
+              <div class="space-y-1" data-prob-label="{{ k|lower }}">
+                <div class="flex justify-between text-[10px] font-mono">
+                  <span class="text-textx">{{ k|upper }}</span>
+                  <span class="prob-value">{{ v }}%</span>
+                </div>
+                <div class="h-2 bg-[#353534] w-full">
+                  <div class="h-full prob-fill" data-prob="{{ v }}"></div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-2 p-6 bg-[#0e0e0e] border-t border-outline/30">
+          <div class="text-[10px] text-muted uppercase font-bold mb-4">Input Vector Digest</div>
+          <div class="flex flex-wrap gap-2">
+            {% for k, v in result.features_used.items() %}
+            <span class="bg-panelhi px-2 py-1 text-[10px] font-mono border border-outline/40">{{ k|upper }}: {{ v }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% else %}
+        <div class="p-10 text-center text-muted text-sm uppercase tracking-wide">NO_PREDICTION_YET. INPUT_PARAMETERS_AND_RUN_ENGINE.</div>
+        {% endif %}
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+  const classColors = {
+    green: '#2e8b57',
+    yellow: '#f2c94c',
+    orange: '#f2994a',
+    red: '#d7263d'
+  };
+
+  document.querySelectorAll('[data-prob-label]').forEach((row) => {
+    const label = row.getAttribute('data-prob-label');
+    const color = classColors[label] || '#00ff41';
+
+    const fill = row.querySelector('.prob-fill');
+    const value = row.querySelector('.prob-value');
+    if (fill) {
+      fill.style.backgroundColor = color;
+    }
+    if (value) {
+      value.style.color = color;
+    }
+  });
+
+  document.querySelectorAll('.prob-fill[data-prob]').forEach((el) => {
+    const v = Number(el.getAttribute('data-prob'));
+    if (!Number.isNaN(v)) {
+      el.style.width = `${Math.max(0, Math.min(100, v))}%`;
+    }
+  });
+
+  document.querySelectorAll('.target-badge[data-target-color]').forEach((el) => {
+    const c = el.getAttribute('data-target-color');
+    if (c) {
+      el.style.backgroundColor = c;
+      el.style.color = '#111';
+    }
+  });
+</script>
+</body></html>

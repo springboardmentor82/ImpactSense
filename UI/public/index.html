@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEISMO_TERM_88 // TERMINAL</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #131313;
+      --line: #3b4b37;
+      --text: #e5e2e1;
+      --muted: #9fb39a;
+      --accent: #00ff41;
+      --accent-soft: #72ff70;
+    }
+
+    * { box-sizing: border-box; }
+
+    body { margin:0; font-family:'Space Grotesk',sans-serif; background:var(--bg); color:var(--text); }
+    .grid-bg {
+      background-image: linear-gradient(rgba(0,255,65,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,65,.06) 1px, transparent 1px);
+      background-size:40px 40px;
+      min-height:100vh;
+    }
+
+    .scanline {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .12;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,.25), rgba(0,0,0,.25) 1px, transparent 1px, transparent 2px);
+    }
+
+    .top {
+      position: sticky;
+      top: 0;
+      min-height:64px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0 18px;
+      background: rgba(19,19,19,.94);
+      backdrop-filter: blur(4px);
+      z-index: 10;
+    }
+
+    .top-inner {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand { color:var(--accent); font-weight:800; letter-spacing:.2em; font-size:.85rem; }
+    .wrap { max-width:1100px; margin:0 auto; padding:56px 24px 42px; }
+    .eyebrow { color:var(--accent-soft); letter-spacing:.25em; font-size:12px; margin:0 0 10px; font-weight: 700; }
+    .title { font-size: clamp(42px, 10vw, 96px); line-height:.85; color:var(--accent); margin:0; text-shadow: 0 0 12px rgba(0,255,65,.26); }
+    .copy { max-width:720px; border-left:2px solid var(--accent); padding-left:16px; color:var(--muted); margin-top: 14px; }
+    .actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
+    .btn { text-decoration:none; padding:12px 18px; font-weight:700; letter-spacing:.08em; display:inline-flex; align-items:center; justify-content:center; }
+    .btn-primary { background:#00ff41; color:#031b09; }
+    .btn-secondary { border:1px solid var(--line); color:var(--accent-soft); }
+
+    .stats {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      background: #171717;
+      padding: 12px;
+    }
+
+    .stat b {
+      display: block;
+      color: var(--accent);
+      font-size: 1.15rem;
+      margin-bottom: 4px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .12em;
+    }
+
+    @media (max-width: 820px) {
+      .stats { grid-template-columns: 1fr; }
+      .top-inner { flex-direction: column; align-items: flex-start; padding: 8px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scanline"></div>
+  <div class="grid-bg">
+    <header class="top">
+      <div class="top-inner">
+        <div class="brand">SEISMIC_COMMAND_V1.0</div>
+        <a class="btn btn-secondary" href="/login">LOGIN</a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <p class="eyebrow">SYSTEM_INITIALIZATION_READY</p>
+      <h1 class="title">SEISMO<br>TERM_88</h1>
+      <p class="copy">Neural-network seismic impact console with serverless prediction backend.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="/login">OPEN_SYSTEM</a>
+        <a class="btn btn-secondary" href="/api/health">API_HEALTH</a>
+      </div>
+
+      <section class="stats">
+        <article class="stat"><b>LIVE</b><span>SERVERLESS_BACKEND_ACTIVE</span></article>
+        <article class="stat"><b>GB_CUSTOM</b><span>MODEL_PIPELINE_READY</span></article>
+        <article class="stat"><b>EDGE_TESTS</b><span>AVAILABLE_AT_/API/TESTS</span></article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

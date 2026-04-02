@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SEISMO_TERM_88 // TERMINAL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              background: "#131313",
+              surface: "#1c1b1b",
+              "surface-hi": "#2a2a2a",
+              accent: "#00ff41",
+              "accent-soft": "#72ff70",
+              outline: "#3b4b37",
+              text: "#e5e2e1",
+              muted: "#9fb39a"
+            },
+            fontFamily: { body: ["Space Grotesk"] }
+          }
+        }
+      }
+    </script>
+<style>
+      body {
+        background-color: #131313;
+        background-image:
+          linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
+        background-size: 40px 40px;
+      }
+      .scanline-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.1),
+          rgba(0, 0, 0, 0.1) 1px,
+          transparent 1px,
+          transparent 2px
+        );
+        pointer-events: none;
+        z-index: 100;
+        opacity: 0.25;
+      }
+      .crt-glow {
+        text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+      }
+    </style>
+</head>
+<body class="text-text font-body selection:bg-accent selection:text-black">
+<div class="scanline-overlay"></div>
+
+<header class="bg-background text-accent uppercase text-sm shadow-[0_0_10px_rgba(0,255,65,0.1)] flex justify-between items-center w-full px-6 h-16 border-b border-outline/40 sticky top-0 z-50">
+  <div class="flex items-center gap-3">
+    <span class="material-symbols-outlined">terminal</span>
+    <span class="text-accent font-bold tracking-[0.2em] uppercase">SEISMIC_COMMAND_V1.0</span>
+  </div>
+  <nav class="hidden md:flex items-center gap-4">
+    {% if user %}
+    <a class="text-white font-black hover:bg-[#2a2a2a] hover:text-accent-soft transition-colors px-3 py-1" href="{{ url_for('predictor') }}">PREDICTOR</a>
+    <form method="post" action="{{ url_for('logout') }}">
+      <button class="text-[#007117] hover:bg-[#2a2a2a] hover:text-accent-soft transition-colors px-3 py-1" type="submit">LOG_OUT</button>
+    </form>
+    {% else %}
+    <a class="text-white font-black hover:bg-[#2a2a2a] hover:text-accent-soft transition-colors px-3 py-1" href="{{ url_for('login') }}">LOGIN</a>
+    {% endif %}
+  </nav>
+  <div class="flex items-center gap-3 text-accent"><span class="material-symbols-outlined">sensors</span></div>
+</header>
+
+<main class="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center p-6 md:p-20 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent pointer-events-none"></div>
+  <div class="z-10 w-full max-w-6xl flex flex-col gap-12">
+    <div class="flex flex-col gap-4">
+      <div class="inline-flex items-center gap-2 text-accent-soft text-xs font-bold tracking-[0.3em] uppercase">
+        <span class="w-2 h-2 bg-accent-soft animate-pulse"></span>
+        SYSTEM_INITIALIZATION_READY
+      </div>
+      <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-accent leading-[0.85] crt-glow">SEISMO<br/>TERM_88</h1>
+      <p class="text-sm md:text-lg max-w-2xl font-mono text-muted leading-relaxed border-l-2 border-accent pl-6 mt-4">
+        NEURAL_NETWORK_DRIVEN_EARTHQUAKE_IMPACT_ANALYSIS_V1.0 // ESTABLISHING_DATA_LINK_WITH_GLOBAL_TECTONIC_SENSORS... [STABLE]
+      </p>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-6">
+      {% if user %}
+      <a class="bg-accent text-black px-8 py-4 font-black text-lg tracking-widest hover:bg-accent-soft transition-colors duration-75 flex items-center justify-center gap-4" href="{{ url_for('predictor') }}">
+        OPEN_PREDICTOR <span class="material-symbols-outlined">double_arrow</span>
+      </a>
+      <form method="post" action="{{ url_for('logout') }}">
+        <button class="border border-outline bg-surface text-accent-soft px-8 py-4 font-bold text-lg tracking-widest hover:bg-surface-hi transition-colors duration-75" type="submit">LOG_OUT</button>
+      </form>
+      {% else %}
+      <a class="bg-accent text-black px-8 py-4 font-black text-lg tracking-widest hover:bg-accent-soft transition-colors duration-75 flex items-center justify-center gap-4" href="{{ url_for('login') }}">
+        INITIALIZE_SYSTEM <span class="material-symbols-outlined">double_arrow</span>
+      </a>
+      {% endif %}
+      <a class="border border-outline bg-surface text-accent-soft px-8 py-4 font-bold text-lg tracking-widest hover:bg-surface-hi transition-colors duration-75" href="{{ url_for('tests') }}">RUN_TESTS_JSON</a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-1 mt-8 bg-outline/30 p-px">
+      <div class="bg-[#0e0e0e] p-6 flex flex-col gap-4">
+        <div class="text-accent text-2xl font-black">95.2%</div>
+        <div class="text-[10px] tracking-widest text-muted uppercase font-bold">GB_CUSTOM_ACCURACY</div>
+      </div>
+      <div class="bg-[#0e0e0e] p-6 flex flex-col gap-4">
+        <div class="text-accent-soft text-2xl font-black">LOW_LATENCY</div>
+        <div class="text-[10px] tracking-widest text-muted uppercase font-bold">PREDICTION_PIPELINE</div>
+      </div>
+      <div class="bg-[#0e0e0e] p-6 flex flex-col gap-4">
+        <div class="text-white text-2xl font-black">LIVE</div>
+        <div class="text-[10px] tracking-widest text-muted uppercase font-bold">SESSION_TERMINAL</div>
+      </div>
+    </div>
+  </div>
+</main>
+</body></html>

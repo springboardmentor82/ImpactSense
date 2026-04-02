@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SeismoTerm-88 | Login</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #131313;
+      --panel: #1c1b1b;
+      --panel-hi: #232323;
+      --line: #3b4b37;
+      --text: #e5e2e1;
+      --muted: #9fb39a;
+      --accent: #00ff41;
+      --accent-soft: #72ff70;
+      --danger: #ffb4ab;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      background-image:
+        linear-gradient(rgba(0, 255, 65, .05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 65, .05) 1px, transparent 1px);
+      background-size: 42px 42px;
+    }
+
+    .scanline-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: .14;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, .22),
+        rgba(0, 0, 0, .22) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+    }
+
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      min-height: 64px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+      background: rgba(19, 19, 19, 0.94);
+      backdrop-filter: blur(4px);
+    }
+
+    .top-inner {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand { color: var(--accent); font-weight: 800; letter-spacing: .2em; font-size: .8rem; }
+    .home-link { color: var(--muted); text-decoration: none; font-size: 12px; letter-spacing: .08em; }
+    .home-link:hover { color: var(--accent-soft); }
+
+    .wrap {
+      min-height: calc(100vh - 64px);
+      display: grid;
+      place-items: center;
+      padding: 26px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card {
+      width: min(560px, 94vw);
+      background: linear-gradient(180deg, var(--panel-hi), var(--panel));
+      border: 1px solid var(--line);
+      padding: 28px;
+      box-shadow: 0 0 0 1px rgba(0, 255, 65, 0.08), 0 14px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    .label { font-size: 12px; color: var(--accent-soft); letter-spacing: .2em; }
+    h1 { margin: 10px 0 10px; color: var(--accent); line-height: 1.08; }
+    .muted { margin: 0 0 16px; color: var(--muted); font-size: 12px; letter-spacing: .06em; }
+
+    input {
+      width: 100%;
+      background: #101010;
+      border: 1px solid var(--line);
+      color: var(--accent);
+      padding: 12px;
+      font-size: 16px;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(0, 255, 65, .18);
+    }
+
+    button {
+      margin-top: 14px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: var(--accent);
+      color: #081d0d;
+      font-weight: 800;
+      letter-spacing: .12em;
+      transition: transform .12s ease, filter .15s ease;
+    }
+
+    button:hover { filter: brightness(1.07); }
+    button:active { transform: translateY(1px); }
+
+    .err {
+      margin-top: 10px;
+      color: var(--danger);
+      font-size: 13px;
+      border: 1px solid rgba(255, 180, 171, .35);
+      background: rgba(147, 0, 10, .15);
+      padding: 8px 10px;
+    }
+
+    .back-link { display: inline-block; margin-top: 12px; color: var(--muted); font-size: 12px; }
+    .back-link:hover { color: var(--accent-soft); }
+
+    @media (max-width: 760px) {
+      .top { padding: 8px 14px; }
+      .top-inner { flex-direction: column; align-items: flex-start; }
+      .wrap { min-height: calc(100vh - 78px); padding: 16px; }
+      .card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scanline-overlay"></div>
+  <header class="top">
+    <div class="top-inner">
+      <div class="brand">SEISMIC_PREDICTOR_INTERFACE</div>
+      <a class="home-link" href="/">DASHBOARD</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <div class="label">SYSTEM_ACCESS_NODE // 0X88_DELTA</div>
+      <h1>USER_IDENTIFICATION_REQUIRED</h1>
+      <p class="muted">ENTER A DISPLAY NAME TO INITIALIZE YOUR SESSION.</p>
+      <form id="loginForm">
+        <input id="displayName" type="text" maxlength="30" required placeholder="TYPE_NAME_HERE">
+        <button type="submit">ENTER_APP</button>
+      </form>
+      <p id="err" class="err" style="display:none"></p>
+      <a class="back-link" href="/">RETURN_TO_LANDING</a>
+    </section>
+  </main>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('displayName').value.trim();
+      const err = document.getElementById('err');
+      if (!name) {
+        err.textContent = 'Please enter a name.';
+        err.style.display = 'block';
+        return;
+      }
+      localStorage.setItem('impact_user', name);
+      window.location.href = '/predictor';
+    });
+  </script>
+</body>
+</html>

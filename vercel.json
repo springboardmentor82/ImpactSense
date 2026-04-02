@@ -1,0 +1,51 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "UI/api/predict.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "UI/api/tests.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "UI/api/health.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "UI/public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/predict/?",
+      "dest": "UI/api/predict.py"
+    },
+    {
+      "src": "/api/tests/?",
+      "dest": "UI/api/tests.py"
+    },
+    {
+      "src": "/api/health/?",
+      "dest": "UI/api/health.py"
+    },
+    {
+      "src": "/login",
+      "dest": "UI/public/login.html"
+    },
+    {
+      "src": "/predictor",
+      "dest": "UI/public/predictor.html"
+    },
+    {
+      "src": "/",
+      "dest": "UI/public/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "UI/public/$1"
+    }
+  ]
+}
