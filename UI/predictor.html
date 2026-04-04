@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>ImpactSense Predictor</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+<script src="script.js"></script>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+<h2 class="logo">ImpactSense</h2>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="predictor.html">Predictor</a>
+<a href="about.html">About</a>
+</div>
+</nav>
+
+<!-- BACKGROUND + WAVE -->
+<div class ="grid-bg"></div>
+
+<!-- PREDICTOR PAGE -->
+<button onclick="getLocation()" 
+class="location-btn">
+    📍 Use My Location
+</button>
+<section class="predictor-page">
+<h1>Earthquake Impact Predictor</h1>
+<p class="subtitle">
+<h2>Enter seismic parameters to estimate earthquake impact</h2>
+</p>
+<!-- PREDICTION FORM -->
+
+<div class="predictor-box">
+<label>Magnitude</label>
+<input id="magnitude" type="number" step="0.1" placeholder="Example: 5.4">
+<label>Depth (km)</label>
+<input id="depth" type="number" placeholder="Example: 10">
+<label>MMI</label>
+<input id="mmi" type="number" placeholder="Example: 6">
+<label>CDI</label>
+<input id="cdi" type="number" placeholder="Example: 4">
+<label>SIG</label>
+<input id="sig" type="number" placeholder="Example: 250">
+<button class="predict-btn" onclick="predictImpact()">
+Predict Impact
+</button>
+</div>
+
+
+<!-- RESULT -->
+
+<div class="result-box">
+<h3>Prediction Result</h3>
+<p id="result">
+Result will appear here
+</p>
+
+</div>
+</section>
+<script src="script.js"></script>
+</body>
+
+</html>
