@@ -6,7 +6,12 @@ Earthquake impact prediction system with:
 - Local Flask app option
 - Vercel static frontend + serverless Python API deployment
 
+## Live Website URL:
+
+- link: https://impact-sense-nine.vercel.app/
+
 ## Project References
+
 
 ### Datasets and Prepared Data
 - [earthquake_alert_balanced_dataset.csv](earthquake_alert_balanced_dataset.csv): Balanced source dataset for model development.
@@ -202,7 +207,7 @@ flowchart TD
 
 ### 7. Conclusion
 - End-to-end system from data science workflow to live deployment.
-- Live website link: https://your-vercel-project-url.vercel.app
+- Live website link: https://impact-sense-nine.vercel.app/
 
 ## Project Document Content
 

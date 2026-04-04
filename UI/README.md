@@ -108,7 +108,7 @@ flowchart TD
 
 ### 7. Conclusion (live website link should be there)
 - The UI and API architecture is production-ready for lightweight deployment.
-- Live website link: https://your-vercel-project-url.vercel.app
+- Live website link: https://impact-sense-nine.vercel.app/
 
 ## Project Document Content
 
