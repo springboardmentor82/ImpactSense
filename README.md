@@ -1,7 +1,3 @@
-# ImpactSense
-Earthquake Prediction System
-
-
 # 🌍 ImpactSense – Earthquake Prediction System
 
 ## 🚀 Live Demo
