@@ -36,5 +36,12 @@ ImpactSense is a machine learning-based web application that predicts earthquake
 
 ---
 
+
+## 🔗 GitHub Repository
+👉 https://github.com/Harshith32424/ImpactSense
+
+
+---
+
 ## 👨‍💻 Author
 Harshith
