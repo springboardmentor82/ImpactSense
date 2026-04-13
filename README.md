@@ -1,4 +1,4 @@
-# 🌐 ImpactSense: Neural Earthquake Orchestration
+# 🌐 ImpactSense: Earthquake Impact Prediction
 
 **Live Application:** [impactsense.vercel.app](https://impactsense.vercel.app/)
 
