@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, StandardScaler
+import pickle
 
 df = pd.read_csv("earthquake_alert_balanced_dataset.csv")
 
@@ -47,3 +48,9 @@ processed_df = X_scaled_df.copy()
 processed_df['alert'] = y.values
 
 processed_df.to_csv("preprocessed_data.csv", index=False)
+
+# Save the label encoder object to a pickle file for future uses
+pickle.dump(le, open("label_encoder.pkl", "wb"))
+
+# Save the label encoder object to a pickle file for future use
+pickle.dump(scaler, open("scaler.pkl", "wb"))
